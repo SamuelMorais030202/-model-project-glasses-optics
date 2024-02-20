@@ -13,4 +13,34 @@ export default async function glasseRoutes(fastify: FastifyInstance): Promise<vo
     '/glasse',
     (req: FastifyRequest, reply: FastifyReply) => glasseController.createGlasse(req, reply),
   );
+
+  //@ts-ignore
+  fastify.get(
+    '/glasse/model',
+    (req: FastifyRequest, reply: FastifyReply) => glasseController.findGlassesByModel(req, reply),
+  );
+
+  //@ts-ignore
+  fastify.get(
+    '/glasse',
+    (req: FastifyRequest, reply: FastifyReply) => glasseController.findGlassesAll(req, reply),
+  );
+
+  //@ts-ignore
+  fastify.get(
+    '/glasse/:id',
+    (req: FastifyRequest, reply: FastifyReply) => glasseController.findGlasseById(req, reply),
+  );
+
+  //@ts-ignore
+  fastify.delete(
+    '/glasse/:id',
+    (req: FastifyRequest, reply: FastifyReply) => glasseController.deleteGlasse(req, reply),
+  );
+
+  //@ts-ignore
+  fastify.put(
+    '/glasse/:id',
+    (req: FastifyRequest, reply: FastifyReply) => glasseController.updateGlasse(req, reply),
+  );
 }
