@@ -15,4 +15,16 @@ export default async function userRoutes(fastify: FastifyInstance): Promise<void
     '/user',
     (req: FastifyRequest, reply: FastifyReply) => userController.addUser(req, reply),
   );
+
+  //@ts-ignore
+  fastify.get(
+    '/user/:id',
+    (req: FastifyRequest, reply: FastifyReply) => userController.getUserById(req, reply),
+  );
+
+  //@ts-ignore
+  fastify.delete(
+    '/user/:id',
+    (req: FastifyRequest, reply: FastifyReply) => userController.deletedUserById(req, reply),
+  );
 } 

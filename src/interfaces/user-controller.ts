@@ -1,9 +1,9 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { IUserCreate, IUserRepository } from "../core/user";
+import { IUserCreate, IUserRepository, UserService } from "../core/user";
 
 export class UserController {
   constructor (
-    private userService: IUserRepository,
+    private userService: UserService,
   ) {
   }
 
@@ -30,6 +30,27 @@ export class UserController {
     } catch (error) {
       console.log(error);
       reply.status(500).send({ error: 'Internal Server Error' + error })
+    }
+  }
+
+  async getUserById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const { id } = req.params as { id: string };
+
+    try {
+      const getUser = await this.userService.findUserById(id);
+      reply.send(getUser)
+    } catch (error: any) {
+      reply.send(error);
+    }
+  }
+
+  async deletedUserById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const { id } = req.params as { id: string };
+    try {
+      const deletedUser = await this.userService.deleteUserById(id);
+      return reply.send(deletedUser);
+    } catch (error) {
+      reply.status(500).send(error);
     }
   }
 }
