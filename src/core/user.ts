@@ -23,9 +23,11 @@ export interface IUserCreate {
 
 export interface IUserRepository {
   addUser(user: IUserCreate): Promise<IUser>;
+  findUserAll(): Promise<IUser[]>;
   findUserByEmail(email: string): Promise<IUser | null> ;
   findUserById(id: string): Promise<IUser | null>;
-  deleteUserById(id: string): Promise<IUser>
+  update(user: IUser): Promise<IUser>;
+  deleteUserById(id: string): Promise<IUser>;
 }
 
 export interface IAuthService {
@@ -43,6 +45,10 @@ export class UserService {
     const newUser = await this.userRepository.addUser(user);
 
     return newUser;
+  }
+
+  async findUserAll(): Promise<IUser[]> {
+    return await this.userRepository.findUserAll();
   }
 
   async findUserByEmail(email: string): Promise<IUser | string> {
@@ -63,6 +69,16 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async update(user: IUser): Promise<IUser | string> {
+    const veriyUserExists = await this.userRepository.findUserById(user.id);
+    if (veriyUserExists === null) {
+      throw new Error('User not existing');
+    }
+
+    const update = await this.userRepository.update(user);
+    return update;
   }
 
   async deleteUserById(id: string): Promise<IUser | string> {

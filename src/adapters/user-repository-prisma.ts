@@ -10,6 +10,10 @@ export class PrismaUserRepository implements IUserRepository {
     return result;
   }
 
+  async findUserAll(): Promise<IUser[]> {
+    return await prisma.user.findMany();
+  }
+
   async findUserByEmail(email: string): Promise<IUser | null> {
     return await prisma.user.findUnique({ where: { email } });
   }
@@ -20,6 +24,15 @@ export class PrismaUserRepository implements IUserRepository {
     });
 
     return user;
+  }
+
+  async update(user: IUser): Promise<IUser> {
+    const {id, ...sendData} = user;
+    const update = await prisma.user.update({
+      where: { id },
+      data: sendData
+    });
+    return update;
   }
 
   async deleteUserById(id: string): Promise<IUser> {

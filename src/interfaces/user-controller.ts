@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { IUserCreate, IUserRepository, UserService } from "../core/user";
+import { IUser, IUserCreate, IUserRepository, UserService } from "../core/user";
 
 export class UserController {
   constructor (
@@ -33,6 +33,11 @@ export class UserController {
     }
   }
 
+  async findUserAll(_req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const users = await this.userService.findUserAll();
+    reply.send(users);
+  }
+
   async getUserById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     const { id } = req.params as { id: string };
 
@@ -41,6 +46,18 @@ export class UserController {
       reply.send(getUser)
     } catch (error: any) {
       reply.send(error);
+    }
+  }
+
+  async updateUser(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const { id } = req.params as { id: string };
+    const user = req.body as IUserCreate;
+
+    try {
+      const update = await this.userService.update({ id, ...user });
+      reply.send(update);
+    } catch (error) {
+      reply.status(404).send(error);
     }
   }
 

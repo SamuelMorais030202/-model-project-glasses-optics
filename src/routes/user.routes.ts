@@ -3,6 +3,7 @@ import { JwtAuthService } from "../adapters/autj-service-jwt";
 import { PrismaUserRepository } from "../adapters/user-repository-prisma";
 import { UserService } from "../core/user";
 import { UserController } from "../interfaces/user-controller";
+import { authMiddleware } from "../middlewares/auth-middleware";
 
 export default async function userRoutes(fastify: FastifyInstance): Promise<void> {
   const userRepository = new PrismaUserRepository();
@@ -17,9 +18,24 @@ export default async function userRoutes(fastify: FastifyInstance): Promise<void
   );
 
   //@ts-ignore
+  fastify.addHook('preHandler', authMiddleware)
+
+  //@ts-ignore
+  fastify.get(
+    '/user',
+    (req: FastifyRequest, reply: FastifyReply) => userController.findUserAll(req, reply),
+  );
+
+  //@ts-ignore
   fastify.get(
     '/user/:id',
     (req: FastifyRequest, reply: FastifyReply) => userController.getUserById(req, reply),
+  );
+
+  //@ts-ignore
+  fastify.put(
+    '/user/:id',
+    (req: FastifyRequest, reply: FastifyReply) => userController.updateUser(req, reply),
   );
 
   //@ts-ignore
