@@ -1,0 +1,38 @@
+{
+  "name": "model-project-glasses-optics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamuelMorais030202/model-project-glasses-optics.git"
+  },
+  "keywords": [],
+  "author": "Samuel Morais030202",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SamuelMorais030202/model-project-glasses-optics/issues"
+  },
+  "homepage": "https://github.com/SamuelMorais030202/model-project-glasses-optics#readme",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.11.16",
+    "prisma": "^5.9.1",
+    "tsc": "^2.0.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@prisma/adapter-pg": "^5.9.1",
+    "@prisma/client": "^5.9.1",
+    "dotenv": "^16.4.1",
+    "fastify": "^4.26.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3"
+  }
+}
