@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcrypt';
+
 export interface IUser {
   id: string;
   name: string;
@@ -61,7 +63,7 @@ export class UserService {
   async findUserById(id: string): Promise<IUser | string> {
     const user = await this.userRepository.findUserById(id);
     if (!user) {
-      throw new Error('User not existing')
+      throw new Error('User not found')
     }
 
     return user;
@@ -70,7 +72,7 @@ export class UserService {
   async update(user: IUser): Promise<IUser | string> {
     const veriyUserExists = await this.userRepository.findUserById(user.id);
     if (veriyUserExists === null) {
-      throw new Error('User not existing');
+      throw new Error('User not found');
     }
 
     const update = await this.userRepository.update(user);
@@ -80,7 +82,7 @@ export class UserService {
   async deleteUserById(id: string): Promise<IUser | string> {
     const veriyUserExists = await this.userRepository.findUserById(id);
     if(veriyUserExists === null) {
-      throw new Error('Usuário não existe')
+      throw new Error('User not found')
     }
 
     const deletedUser = await this.userRepository.deleteUserById(id);
@@ -91,15 +93,17 @@ export class UserService {
     const user = await this.userRepository.findUserByEmail(email);
 
     if (!user) {
-      throw new Error('Credenciais inválidas');
+      throw new Error('User not found');
     }
 
-    if (password !== user.password) {
-      throw new Error('Credenciais inválidas')
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (passwordMatch) {
+      const token = this.authService.generateToken(user);
+      return token;
+    } else {
+      throw new Error('Invalid credentials')
     }
 
-    const token = this.authService.generateToken(user);
-    return token;
   }
 
   async findUserByCpf(cpf: string): Promise<IUser | null> {

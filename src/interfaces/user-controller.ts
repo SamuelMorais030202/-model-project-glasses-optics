@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { IUser, IUserCreate, IUserRepository, UserService } from "../core/user";
+import * as bcrypt from 'bcrypt';
 
 export class UserController {
   constructor (
@@ -8,13 +9,15 @@ export class UserController {
   }
 
   async addUser(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { address, age, city, cpf, email, lastName, name, password } = request.body as IUserCreate;
+    let { address, age, city, cpf, email, lastName, name, password } = request.body as IUserCreate;
 
     const veriyUserExistsEmail = await this.userService.findUserByEmail(email);
     const veriyUserExistsCpf = await this.userService.findUserByCpf(cpf);
     if (veriyUserExistsEmail || veriyUserExistsCpf) {
       return reply.status(404).send({ message: 'User already exists' });
     }
+
+    password = await bcrypt.hash(password, 10);
 
     try {
       const response = await this.userService.addUser({

@@ -12,7 +12,7 @@ export class AuthController {
       reply.send({ token });
     } catch (error) {
       console.error(error);
-      reply.status(401).send({ error: 'Credenciais inválidas' });
+      reply.status(401).send({ error});
     }
   }
 }
