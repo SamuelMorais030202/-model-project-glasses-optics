@@ -10,9 +10,10 @@ export class UserController {
   async addUser(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     const { address, age, city, cpf, email, lastName, name, password } = request.body as IUserCreate;
 
-    const veriyUserExists = await this.userService.findUserByEmail(email);
-    if (veriyUserExists) {
-      throw new Error('User already exists');
+    const veriyUserExistsEmail = await this.userService.findUserByEmail(email);
+    const veriyUserExistsCpf = await this.userService.findUserByCpf(cpf);
+    if (veriyUserExistsEmail || veriyUserExistsCpf) {
+      return reply.status(404).send({ message: 'User already exists' });
     }
 
     try {

@@ -18,29 +18,30 @@ export default async function userRoutes(fastify: FastifyInstance): Promise<void
   );
 
   //@ts-ignore
-  fastify.addHook('preHandler', authMiddleware)
-
-  //@ts-ignore
   fastify.get(
     '/user',
+    {onRequest: [authMiddleware]},
     (req: FastifyRequest, reply: FastifyReply) => userController.findUserAll(req, reply),
   );
 
   //@ts-ignore
   fastify.get(
     '/user/:id',
+    {onRequest: [authMiddleware]},
     (req: FastifyRequest, reply: FastifyReply) => userController.getUserById(req, reply),
   );
 
   //@ts-ignore
   fastify.put(
     '/user/:id',
+    {onRequest: [authMiddleware]},
     (req: FastifyRequest, reply: FastifyReply) => userController.updateUser(req, reply),
   );
 
   //@ts-ignore
   fastify.delete(
     '/user/:id',
+    {onRequest: [authMiddleware]},
     (req: FastifyRequest, reply: FastifyReply) => userController.deletedUserById(req, reply),
   );
 } 

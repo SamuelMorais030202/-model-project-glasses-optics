@@ -28,6 +28,7 @@ export interface IUserRepository {
   findUserById(id: string): Promise<IUser | null>;
   update(user: IUser): Promise<IUser>;
   deleteUserById(id: string): Promise<IUser>;
+  findUserByCpf(cpf: string): Promise<IUser | null>;
 }
 
 export interface IAuthService {
@@ -51,13 +52,8 @@ export class UserService {
     return await this.userRepository.findUserAll();
   }
 
-  async findUserByEmail(email: string): Promise<IUser | string> {
+  async findUserByEmail(email: string): Promise<IUser | null> {
     const user = await this.userRepository.findUserByEmail(email);
-
-    if(user === null) {
-      throw new Error('User not existing');
-    }
-
     return user;
   }
 
@@ -104,5 +100,10 @@ export class UserService {
 
     const token = this.authService.generateToken(user);
     return token;
+  }
+
+  async findUserByCpf(cpf: string): Promise<IUser | null> {
+    const user = await this.userRepository.findUserByCpf(cpf);
+    return user;
   }
 }

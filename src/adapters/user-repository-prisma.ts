@@ -26,6 +26,10 @@ export class PrismaUserRepository implements IUserRepository {
     return user;
   }
 
+  async findUserByCpf(cpf: string): Promise<IUser | null> {
+    return await prisma.user.findUnique({ where: { cpf } });
+  }
+
   async update(user: IUser): Promise<IUser> {
     const {id, ...sendData} = user;
     const update = await prisma.user.update({
